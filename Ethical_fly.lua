@@ -3,14 +3,13 @@ local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 local camera = game.Workspace.CurrentCamera
 
-local flying = true
+local flying = false
 local flySpeed = 50
 local bodyVelocity
 local bodyGyro
-local flyEnabled = true
 
 local function startFlying()
-    if flying or not flyEnabled then return end
+    if flying then return end
     flying = true
 
     bodyVelocity = Instance.new("BodyVelocity")
@@ -37,38 +36,36 @@ local function stopFlying()
     humanoid.PlatformStand = false
 end
 
+startFlying()
+
 game:GetService("RunService").Heartbeat:Connect(function()
-    if flyEnabled then
-        if flying then
-            local velocity = Vector3.new()
+    if flying then
+        local velocity = Vector3.new()
 
-            local cameraDirection = camera.CFrame.LookVector
-            local cameraRight = camera.CFrame.RightVector
-            local cameraUp = camera.CFrame.UpVector
+        local cameraDirection = camera.CFrame.LookVector
+        local cameraRight = camera.CFrame.RightVector
+        local cameraUp = camera.CFrame.UpVector
 
-            if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.W) then
-                velocity = velocity + cameraDirection
-            end
-            if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.S) then
-                velocity = velocity - cameraDirection
-            end
-            if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.A) then
-                velocity = velocity - cameraRight
-            end
-            if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.D) then
-                velocity = velocity + cameraRight
-            end
-            if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.Space) then
-                velocity = velocity + cameraUp
-            end
-            if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftControl) then
-                velocity = velocity - cameraUp
-            end
-
-            bodyVelocity.Velocity = velocity * flySpeed
-            bodyGyro.CFrame = CFrame.new(character.HumanoidRootPart.Position, character.HumanoidRootPart.Position + cameraDirection)
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.W) then
+            velocity = velocity + cameraDirection
         end
-    else
-        stopFlying()
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.S) then
+            velocity = velocity - cameraDirection
+        end
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.A) then
+            velocity = velocity - cameraRight
+        end
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.D) then
+            velocity = velocity + cameraRight
+        end
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.Space) then
+            velocity = velocity + cameraUp
+        end
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftControl) then
+            velocity = velocity - cameraUp
+        end
+
+        bodyVelocity.Velocity = velocity * flySpeed
+        bodyGyro.CFrame = CFrame.new(character.HumanoidRootPart.Position, character.HumanoidRootPart.Position + cameraDirection)
     end
 end)
