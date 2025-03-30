@@ -3,7 +3,7 @@ local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 local camera = game.Workspace.CurrentCamera
 
-local flying = false
+local flying = true
 local flySpeed = 50
 local bodyVelocity
 local bodyGyro
